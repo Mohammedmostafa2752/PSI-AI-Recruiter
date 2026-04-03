@@ -1,0 +1,67 @@
+2026-04-02 11:10:58,438 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 11:16:46,990 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 11:18:31,207 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 11:18:33,471 - INFO - Prepared final image for OpenAI. Base size: 644896 bytes
+2026-04-02 11:18:33,472 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:19:16,259 - INFO - Successfully received generated image from OpenAI
+2026-04-02 11:19:21,586 - INFO - Finished pipeline for user 949012121
+2026-04-02 11:28:48,462 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 11:29:55,716 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 11:29:57,002 - INFO - Prepared final image for OpenAI. Base size: 717121 bytes
+2026-04-02 11:29:57,003 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:30:41,299 - INFO - Successfully received generated image from OpenAI
+2026-04-02 11:30:43,023 - INFO - Finished pipeline for user 949012121
+2026-04-02 11:35:21,758 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_multi_same
+2026-04-02 11:35:24,335 - INFO - Prepared final image for OpenAI. Base size: 817981 bytes
+2026-04-02 11:35:24,335 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:35:39,864 - INFO - User 949012121 triggered batch processing with 3 image(s) in state awaiting_multi_same
+2026-04-02 11:35:42,708 - INFO - Prepared final image for OpenAI. Base size: 745834 bytes
+2026-04-02 11:35:42,708 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:36:11,250 - INFO - Successfully received generated image from OpenAI
+2026-04-02 11:36:13,085 - INFO - Finished pipeline for user 949012121
+2026-04-02 11:36:33,062 - INFO - Successfully received generated image from OpenAI
+2026-04-02 11:36:35,008 - INFO - Finished pipeline for user 949012121
+2026-04-02 11:43:00,306 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 11:44:03,801 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 11:44:05,095 - INFO - Prepared final image for OpenAI. Base size: 212799 bytes
+2026-04-02 11:44:05,095 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:44:07,167 - ERROR - Error during AI Processing: Error code: 400 - {'error': {'message': "Invalid size '512x512'. Supported sizes are 1024x1024, 1024x1536, 1536x1024, and auto.", 'type': 'image_generation_user_error', 'param': 'size', 'code': 'invalid_value'}}
+Traceback (most recent call last):
+  File "C:\Users\mohammed.mostafa\Anti Gravity\Telegram_Bot\Telegram_Bot.py", line 263, in process_and_send_to_ai
+    result = client.images.edit(
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mohammed.mostafa\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_utils\_utils.py", line 286, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mohammed.mostafa\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\resources\images.py", line 511, in edit
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\mohammed.mostafa\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1297, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mohammed.mostafa\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1070, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': "Invalid size '512x512'. Supported sizes are 1024x1024, 1024x1536, 1536x1024, and auto.", 'type': 'image_generation_user_error', 'param': 'size', 'code': 'invalid_value'}}
+2026-04-02 11:46:00,953 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 11:56:49,121 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 11:56:51,234 - INFO - Prepared final image for OpenAI. Base size: 603916 bytes
+2026-04-02 11:56:51,235 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:57:51,516 - INFO - Successfully received generated image from OpenAI
+2026-04-02 11:57:58,766 - INFO - Finished pipeline for user 949012121
+2026-04-02 11:58:54,775 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 11:58:57,352 - INFO - Prepared final image for OpenAI. Base size: 466551 bytes
+2026-04-02 11:58:57,353 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 11:59:56,106 - INFO - Successfully received generated image from OpenAI
+2026-04-02 11:59:57,938 - INFO - Finished pipeline for user 949012121
+2026-04-02 12:03:50,460 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 12:16:54,339 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 12:16:56,409 - INFO - Prepared final image for OpenAI. Base size: 603916 bytes
+2026-04-02 12:16:56,409 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 12:17:44,906 - INFO - Successfully received generated image from OpenAI
+2026-04-02 12:17:50,487 - INFO - Finished pipeline for user 949012121
+2026-04-02 12:22:16,008 - INFO - Initializing multi-image Telegram Agent...
+2026-04-02 12:23:07,211 - INFO - User 949012121 triggered batch processing with 1 image(s) in state awaiting_one_pic
+2026-04-02 12:23:09,530 - INFO - Prepared final image for OpenAI. Base size: 717121 bytes
+2026-04-02 12:23:09,531 - INFO - Connecting to OpenAI Image Edit API...
+2026-04-02 12:24:09,736 - INFO - Successfully received generated image from OpenAI
+2026-04-02 12:24:23,352 - INFO - Finished pipeline for user 949012121

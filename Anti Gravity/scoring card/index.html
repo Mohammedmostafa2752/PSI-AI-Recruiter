@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSI Voice Agent — QA Scorecard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar context -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fa-solid fa-headset text-accent"></i> PSI Voice Agent</h1>
+                <p>QA Scorecard</p>
+            </div>
+
+            <div class="sidebar-section">
+                <label>Select an agent type to begin</label>
+                <div class="agent-buttons">
+                    <button class="agent-btn active" data-agent="sales">Sales (Sarah)</button>
+                    <button class="agent-btn" data-agent="listing">Listing (Sarah)</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fa-solid fa-phone"></i> Call Details</h3>
+                <div class="input-group">
+                    <label>Call ID</label>
+                    <input type="text" id="callId" placeholder="e.g. CALL-001">
+                </div>
+                <div class="input-group">
+                    <label>Call type</label>
+                    <select id="callType">
+                        <option value="" disabled selected>— select —</option>
+                        <option value="Outbound">Outbound</option>
+                        <option value="Inbound">Inbound</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Reviewer</label>
+                    <select id="reviewerName">
+                        <option value="" disabled selected>— select reviewer —</option>
+                        <option value="Amr Sadek">Amr Sadek</option>
+                        <option value="Mohammed Mostafa">Mohammed Mostafa</option>
+                        <option value="Ali Mhanna">Ali Mhanna</option>
+                        <option value="Dareen Amin">Dareen Amin</option>
+                        <option value="Ahmad Khuder">Ahmad Khuder</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Form Content -->
+        <main class="main-content">
+            <!-- Sticky Score Header -->
+            <div class="score-sticky-header">
+                <div class="live-score-title">Live score</div>
+                <div class="score-grid">
+                    <div class="score-box">
+                        <span class="score-label">Overall</span>
+                        <span class="score-value" id="scoreOverall">—</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="score-label">Technical</span>
+                        <span class="score-value" id="scoreTech">—</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="score-label">Agent rules</span>
+                        <span class="score-value" id="scoreRules">—</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="score-label">Data accuracy</span>
+                        <span class="score-value" id="scoreData">—</span>
+                    </div>
+                    <div class="score-box grade-box">
+                        <span class="score-label">Grade</span>
+                        <span class="score-eval" id="gradeValue">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-container">
+                <!-- Question Group 1: Technical -->
+                <div class="question-card" data-category="technical">
+                    <div class="question-header">
+                        <span class="multiplier">×1.0</span>
+                        <div>
+                            <h3>Response delay / latency</h3>
+                            <p>First utterance delay, turn-taking gaps, TTS lag</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_delay" value="good"> Good (&lt;1.5s)</label>
+                        <label class="radio-card"><input type="radio" name="q_delay" value="borderline"> Borderline (&gt;1.5s, &lt;3s)</label>
+                        <label class="radio-card"><input type="radio" name="q_delay" value="high"> High (&gt;3s)</label>
+                    </div>
+                </div>
+
+                <!-- Question Group 2: Agent Rules -->
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.5</span>
+                        <div>
+                            <h3>Prompt adherence</h3>
+                            <p>Stays within scope, persona, KB only</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_prompt" value="100"> Fully adhered (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_prompt" value="80"> Slightly deviated (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_prompt" value="50"> Partial drift (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_prompt" value="0"> Off-prompt (0%)</label>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.5</span>
+                        <div>
+                            <h3>Instructions following</h3>
+                            <p>System-level rules: language, flow, honorifics, do-nots</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_inst" value="100"> All followed (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_inst" value="80"> Mostly followed (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_inst" value="50"> Some missed (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_inst" value="0"> Violated (0%)</label>
+                    </div>
+                    <div class="notes-section">
+                        <textarea id="techNotes" placeholder="Technical notes..."></textarea>
+                        <textarea id="rulesNotes" placeholder="Agent rules notes..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.0</span>
+                        <div>
+                            <h3>Noise & Background Chatter</h3>
+                            <p>Ignored side conversations and only addressed caller</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_noise" value="100"> Ignored properly (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_noise" value="80"> Minor hesitation (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_noise" value="50"> Responded/Paused briefly (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_noise" value="0"> Major disruption (0%)</label>
+                        <label class="radio-card"><input type="radio" name="q_noise" value="na"> N/A (No noise)</label>
+                    </div>
+                </div>
+
+                <!-- Custom Listing Agent Section -->
+                <div id="listingAgentSection" style="display: none;">
+                    <div class="question-card" data-category="rules">
+                        <div class="question-header">
+                            <span class="multiplier">×1.5</span>
+                            <div>
+                                <h3>Madmoun law handling</h3>
+                                <p>Max 3 agencies or 1 exclusive — correct if asked</p>
+                            </div>
+                        </div>
+                        <div class="options-row">
+                            <label class="radio-card"><input type="radio" name="q_madmoun" value="100"> Correct (100%)</label>
+                            <label class="radio-card"><input type="radio" name="q_madmoun" value="50"> Incomplete (50%)</label>
+                            <label class="radio-card"><input type="radio" name="q_madmoun" value="0"> Wrong (0%)</label>
+                            <label class="radio-card"><input type="radio" name="q_madmoun" value="na"> Not asked</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card" data-category="rules">
+                        <div class="question-header">
+                            <span class="multiplier">×1.5</span>
+                            <div>
+                                <h3>No contact details solicited</h3>
+                                <p>Never asked for phone/WhatsApp/email directly</p>
+                            </div>
+                        </div>
+                        <div class="options-row">
+                            <label class="radio-card"><input type="radio" name="q_contact" value="100"> Clean (100%)</label>
+                            <label class="radio-card"><input type="radio" name="q_contact" value="0"> Asked for contact (0%)</label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Detection Accuracy Section (Common) -->
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.5</span>
+                        <div>
+                            <h3>Intent / entity detection</h3>
+                            <p>Name, budget, unit type extracted correctly</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_intent" value="100"> Accurate (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_intent" value="80"> Mostly accurate (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_intent" value="50"> Partial (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_intent" value="0"> Inaccurate (0%)</label>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.0</span>
+                        <div>
+                            <h3>Sentiment / frustration reading</h3>
+                            <p>Detected frustration/tiredness and applied objection handling</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_sentiment" value="100"> Correct (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_sentiment" value="80"> Slightly misread (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_sentiment" value="50"> Off (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_sentiment" value="0"> Missed (0%)</label>
+                        <label class="radio-card"><input type="radio" name="q_sentiment" value="na"> N/A</label>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.5</span>
+                        <div>
+                            <h3>Interest level detection</h3>
+                            <p>Interest signals tracked before closing the lead</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_interest" value="100"> Correct (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_interest" value="80"> Mostly Tracked (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_interest" value="50"> Partial (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_interest" value="0"> Missed (0%)</label>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="rules">
+                    <div class="question-header">
+                        <span class="multiplier">×1.0</span>
+                        <div>
+                            <h3>Wrong person handling</h3>
+                            <p>Correct script when person is not the target contact</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_wrongperson" value="100"> Correct (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_wrongperson" value="0"> Wrong handling (0%)</label>
+                        <label class="radio-card"><input type="radio" name="q_wrongperson" value="na"> Not triggered</label>
+                    </div>
+                    <textarea id="detectionNotes" placeholder="Detection accuracy notes..." style="margin-top: 15px;"></textarea>
+                </div>
+
+                <!-- Question Group 3: Data Accuracy (Tags & Memory) -->
+                <div class="question-card" data-category="data">
+                    <div class="question-header">
+                        <span class="multiplier">×2.0</span>
+                        <div>
+                            <h3>Outcome tag accuracy</h3>
+                            <p>Were correct outcome tags applied at end of call?</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_tags" value="100"> All correct (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_tags" value="80"> Mostly Correct (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_tags" value="50"> Partially correct (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_tags" value="0"> Wrong/missing (0%)</label>
+                    </div>
+                    <div class="tag-audit-section">
+                        <p class="audit-hint">Tag audit — click to cycle: unreviewed → correct → missed → hallucinated</p>
+                        <div id="tagList" class="tag-list">
+                            <!-- Dynamic tags will be injected here -->
+                        </div>
+                        <div class="add-tag-form">
+                            <input type="text" id="customTagInput" placeholder="Add custom tag...">
+                            <button id="addCustomTagBtn" class="btn secondary small">+ Add</button>
+                        </div>
+                        <textarea id="tagNotes" placeholder="Tag notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="data">
+                    <div class="question-header">
+                        <span class="multiplier">×2.0</span>
+                        <div>
+                            <h3>Overall memory fields extraction</h3>
+                            <p>Accuracy of memory field capture across the call</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_memory" value="100"> All correct (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_memory" value="80"> Mostly Correct (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_memory" value="50"> Partial (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_memory" value="0"> Poor (0%)</label>
+                        <label class="radio-card"><input type="radio" name="q_memory" value="na"> N/A</label>
+                    </div>
+                    <div class="memory-audit-section">
+                        <table class="memory-table">
+                            <thead>
+                                <tr>
+                                    <th>Field</th>
+                                    <th>Expected</th>
+                                    <th>Captured by agent</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="memoryTableBody">
+                                <!-- Dynamic fields injected here -->
+                            </tbody>
+                        </table>
+                        <button id="addMemoryFieldBtn" class="btn secondary small" style="margin-top: 10px;">+ Add field</button>
+                        <textarea id="memoryNotes" placeholder="Memory notes..." style="margin-top: 15px;"></textarea>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="data">
+                    <div class="question-header">
+                        <span class="multiplier">×2.0</span>
+                        <div>
+                            <h3>Hallucination severity</h3>
+                            <p>Invented facts, prices, or context not in KB</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_hallucination" value="100"> None detected (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_hallucination" value="80"> Very Minor (80%)</label>
+                        <label class="radio-card"><input type="radio" name="q_hallucination" value="50"> Minor/low risk (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_hallucination" value="0"> Significant (0%)</label>
+                    </div>
+                </div>
+
+                <div class="question-card" data-category="data">
+                    <div class="question-header">
+                        <span class="multiplier">×2.0</span>
+                        <div>
+                            <h3>Price invention</h3>
+                            <p>Quoted prices not in KB or wrong conversion</p>
+                        </div>
+                    </div>
+                    <div class="options-row">
+                        <label class="radio-card"><input type="radio" name="q_price" value="100"> No invented prices (100%)</label>
+                        <label class="radio-card"><input type="radio" name="q_price" value="50"> Conversion error (50%)</label>
+                        <label class="radio-card"><input type="radio" name="q_price" value="0"> Invented price (0%)</label>
+                        <label class="radio-card"><input type="radio" name="q_price" value="na"> Price not raised</label>
+                    </div>
+                    <textarea id="hallucinationNotes" placeholder="Hallucination detected — log details" style="margin-top: 15px;"></textarea>
+                </div>
+
+                <!-- Footer Submit -->
+                <div class="submit-section">
+                    <button id="submitScorecardBtn" class="btn primary large">Submit to Google Sheets</button>
+                    <p class="submit-hint">Submit scorecard. Each submission adds one row to your sheet with all scored fields, tags, memory fields, verdict, and timestamps.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Template for tag cycle buttons -->
+    <template id="tagCycleTemplate">
+        <button class="tag-cycle-btn unreviewed">
+            <span class="tag-name"></span>
+            <span class="tag-state"><i class="fa-solid fa-circle-question"></i></span>
+        </button>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html>

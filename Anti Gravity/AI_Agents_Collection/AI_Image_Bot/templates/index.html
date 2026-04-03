@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Enhancer | Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="ri-braces-line logo-icon"></i>
+                <h2>AI Enhancer</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="ri-dashboard-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="ri-file-list-3-line"></i>
+                    <span>System Logs</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="ri-settings-4-line"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="bot-status online">
+                <div class="status-indicator"></div>
+                <span>Bot Online</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-titles">
+                    <h1>Real-time Activity Log</h1>
+                    <p>Monitor your AI enhancements and bot interactions</p>
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=random" alt="Admin Avatar" class="avatar">
+                </div>
+            </header>
+
+            <!-- Metrics Cards -->
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon blue"><i class="ri-inbox-archive-line"></i></div>
+                    <div class="metric-content">
+                        <p class="metric-title">Total Requests</p>
+                        <h3 class="metric-value">{{ total_requests }}</h3>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon green"><i class="ri-magic-line"></i></div>
+                    <div class="metric-content">
+                        <p class="metric-title">Successful AI Generations</p>
+                        <h3 class="metric-value">{{ successful_ai }}</h3>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon red"><i class="ri-error-warning-line"></i></div>
+                    <div class="metric-content">
+                        <p class="metric-title">Errors Encountered</p>
+                        <h3 class="metric-value">{{ total_errors }}</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logs Table Section -->
+            <section class="logs-section">
+                <div class="section-header">
+                    <h2>Recent Activity Logs</h2>
+                    <button class="btn-refresh" onclick="window.location.reload()"><i class="ri-refresh-line"></i> Refresh</button>
+                </div>
+                <div class="table-container">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Type</th>
+                                <th>Source</th>
+                                <th>User ID</th>
+                                <th>Message Activity</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr class="log-row {% if log.level == 'ERROR' %}error-row{% endif %}">
+                                <td class="time-col">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>
+                                    <span class="badge badge-{{ log.level.lower() }}">{{ log.level }}</span>
+                                </td>
+                                <td><span class="badge-source">{{ log.source }}</span></td>
+                                <td class="user-id">{% if log.user_id %}{{ log.user_id }}{% else %}-{% endif %}</td>
+                                <td class="message-col">
+                                    <div class="msg-content">{{ log.message }}</div>
+                                    {% if log.error_details %}
+                                        <div class="error-detail">{{ log.error_details }}</div>
+                                    {% endif %}
+                                    {% if log.image_url_input or log.image_url_output %}
+                                        <div class="image-previews">
+                                            {% if log.image_url_input %}
+                                            <a href="{{ log.image_url_input }}" target="_blank" class="img-link">
+                                                <i class="ri-image-line"></i> Input
+                                            </a>
+                                            {% endif %}
+                                            {% if log.image_url_output %}
+                                            <a href="{{ log.image_url_output }}" target="_blank" class="img-link output-link">
+                                                <i class="ri-sparkling-fill"></i> Output
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td>{% if log.processing_time_sec %}{{ log.processing_time_sec }}s{% else %}-{% endif %}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="empty-state">No logs recorded yet. Start talking to your bot!</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Simple auto-refresh every 30 seconds
+        setTimeout(() => {
+            window.location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>

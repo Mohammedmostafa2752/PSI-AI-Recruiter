@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TRIO AI Agent</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>TRIO</h2>
+      <p class="subtitle">AI Job Sourcing Agent</p>
+    </div>
+
+    <div class="form-card">
+      <div class="form-group">
+        <label for="platformSelect">Search Platform <span style="color:#DC2626">*</span></label>
+        <select id="platformSelect">
+          <option value="linkedin">LinkedIn Jobs</option>
+          <option value="indeed">Indeed Jobs</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Target Job Title <span style="color:#DC2626">*</span></label>
+        <select id="role">
+          <!-- Populated via JS with ~100+ roles -->
+        </select>
+        <input type="text" id="customRole" placeholder="Type custom target job here..." style="display:none; margin-top:8px;" />
+      </div>
+
+      <div class="form-group">
+        <label for="countrySelect">Target Country <span style="color:#DC2626">*</span></label>
+        <select id="countrySelect">
+          <option value="UAE">UAE</option>
+          <option value="KSA">Saudi Arabia</option>
+          <option value="EGY">Egypt</option>
+          <option value="QAT">Qatar</option>
+          <option value="IND">India</option>
+          <option value="USA">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="Anywhere">Anywhere Else / Custom...</option>
+        </select>
+        <input type="text" id="customCountry" placeholder="Type country name..." style="display:none; margin-top:8px;" />
+      </div>
+
+      <div class="form-group" id="cityGroup">
+        <label>Target Cities (Optional)</label>
+        <div id="cityCheckboxes" class="checkbox-list">
+           <!-- Populated via JS -->
+        </div>
+        <input type="text" id="customCity" placeholder="Type custom cities (comma separated)..." style="display:none; margin-top:8px;" />
+      </div>
+
+      <div class="form-group">
+        <label for="cvDetails">Candidate CV / Skills / Certs <span style="color:#DC2626">*</span></label>
+        <textarea id="cvDetails" placeholder="Paste your background... e.g. 'Network Engineer with 5 years exp, holding MBA, CCNA, and MCSA.'" rows="4"></textarea>
+      </div>
+
+      <div class="form-group" style="background-color: rgba(30, 64, 175, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(30, 64, 175, 0.1);">
+        <label style="color:var(--trio-gold); font-size:11px; margin-bottom:8px;">APPLICATION AUTOMATION SETTINGS</label>
+        
+        <label for="expectedSalary">Expected Salary</label>
+        <input type="text" id="expectedSalary" placeholder="e.g. 15000 AED" style="margin-bottom: 8px;" />
+        
+        <label for="driverLicense">Do you have a driver's license?</label>
+        <select id="driverLicense" style="margin-bottom: 8px;">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="apiKey">Your OpenAI API Key <span style="color:#DC2626">*</span></label>
+        <input type="password" id="apiKey" placeholder="sk-..." />
+      </div>
+    </div>
+
+    <div class="button-group" id="primaryActions">
+      <button id="saveSettingsBtn" class="secondary-btn">Save Settings</button>
+      
+      <div id="primaryStartBtnContainer" style="width:100%;">
+         <button id="startBtn" class="primary-btn">Start Job Search</button>
+      </div>
+
+      <div id="resumeActions" style="display:none; flex-direction:column; gap:10px; width:100%;">
+        <div style="font-size:12px; color:var(--trio-blue); font-weight:700; text-align:center; padding: 4px; border-bottom: 1px solid var(--trio-border);">
+          Saved Session: Resume Evaluation <span id="lblPage" style="color:var(--trio-gold);"></span>?
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button id="resumeBtn" class="primary-btn" style="flex:1;">Continue</button>
+          <button id="restartBtn" class="secondary-btn" style="flex:1;">Start Over</button>
+        </div>
+      </div>
+
+      <button id="stopBtn" class="danger-btn" style="display:none; width:100%;">Stop Search</button>
+    </div>
+    
+    <div id="saveConfirm" style="display:none;">Settings Saved Successfully!</div>
+    
+    <div style="display: flex; gap: 10px;">
+      <button id="downloadFitsBtn" class="download-btn" title="Download only the AI matches.">Download Matches</button>
+      <button id="downloadAllBtn" class="secondary-btn" title="Download every job that was evaluated.">Download All</button>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">
+      <div class="log-title">Activity Stream</div>
+      <button id="clearLogsBtn" style="background: none; border: none; color: var(--trio-blue); font-size: 11px; font-weight: 700; cursor: pointer; padding: 0; text-transform: uppercase;">Clear</button>
+    </div>
+    <div id="log" class="log-area"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSI Voice Agent — AI Auto-Evaluation KPI Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 11pt;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 40px;
+    max-width: 900px;
+    margin: auto;
+  }
+
+  /* Cover Header */
+  .cover {
+    text-align: center;
+    padding: 50px 20px 40px;
+    border-bottom: 3px solid #4f46e5;
+    margin-bottom: 36px;
+  }
+  .cover .logo-text {
+    font-size: 13pt;
+    font-weight: 600;
+    color: #4f46e5;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .cover h1 {
+    font-size: 24pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .cover p {
+    font-size: 11pt;
+    color: #666;
+  }
+
+  /* Section labels */
+  .section-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #fff;
+    background: #4f46e5;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin: 32px 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* KPI Card */
+  .kpi-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .kpi-header {
+    background: #f5f5ff;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .kpi-number {
+    background: #4f46e5;
+    color: white;
+    font-weight: 700;
+    font-size: 10pt;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .kpi-title {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+  .kpi-weight {
+    margin-left: auto;
+    font-size: 10pt;
+    font-weight: 600;
+    color: #4f46e5;
+    background: #eef2ff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .kpi-body {
+    padding: 0;
+  }
+
+  /* Score Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+  thead tr {
+    background: #f9f9f9;
+  }
+  th {
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  .badge-100 { background: #d1fae5; color: #065f46; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; font-size: 9pt; }
+  .badge-80  { background: #dbeafe; color: #1e40af; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; font-size: 9pt; }
+  .badge-50  { background: #fef3c7; color: #92400e; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; font-size: 9pt; }
+  .badge-20  { background: #fee2e2; color: #991b1b; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; font-size: 9pt; }
+
+  /* Formula Box */
+  .formula-box {
+    background: #f5f5ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 28px 0;
+  }
+  .formula-box h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 12px;
+  }
+  .formula-box pre {
+    font-family: 'Courier New', monospace;
+    font-size: 10pt;
+    color: #1a1a2e;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+
+  /* Prompt Box */
+  .prompt-box {
+    background: #1a1a2e;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 28px 0;
+    page-break-inside: avoid;
+  }
+  .prompt-box h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #818cf8;
+    margin-bottom: 12px;
+  }
+  .prompt-box p {
+    font-size: 10pt;
+    line-height: 1.7;
+    color: #d1d5db;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 9pt;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 40px;
+  }
+
+  @media print {
+    body { padding: 20px; font-size: 10pt; }
+    .kpi-card { page-break-inside: avoid; }
+    .section-title { page-break-after: avoid; }
+    .cover { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="logo-text">Property Shop Investment</div>
+  <h1>AI Agent Auto-Evaluation<br>KPI Framework</h1>
+  <p>A scoring guide for AI-powered transcript evaluation of PSI voice agents<br>
+  Prepared: March 2026 &nbsp;|&nbsp; Version 1.0</p>
+</div>
+
+<!-- CATEGORY 1 -->
+<div class="section-title">📡 Category 1 — Technical Performance</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">1</div>
+    <div class="kpi-title">Response Delay / Latency</div>
+    <div class="kpi-weight">Multiplier ×1.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Good (&lt;1.5s)</td><td>Agent responds immediately after client finishes; no lag indicators, no filler words used to stall.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Slight delay</td><td>Minor phrases like "one moment" or "let me check" appear, but agent recovers and answers promptly.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Borderline (3–5s)</td><td>Noticeable pause is implied; client had to repeat themselves or asked an additional prompt before a reply.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>High (&gt;5s)</td><td>Client asked "are you there?", repeated themselves multiple times, or call showed signs of near-disconnect.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">2</div>
+    <div class="kpi-title">Noise &amp; Background Chatter Handling</div>
+    <div class="kpi-weight">Multiplier ×1.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Ignored properly</td><td>No signs the agent reacted to background noise; stayed fully on topic throughout.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Minor hesitation</td><td>Brief pause noted in transcript but agent quickly returned to subject.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Briefly disrupted</td><td>Agent briefly addressed the wrong voice or went off-topic for one exchange.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Major disruption</td><td>Agent responded to someone other than the intended caller, lost thread of conversation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CATEGORY 2 -->
+<div class="section-title">📋 Category 2 — Agent Rules &amp; Instructions</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">3</div>
+    <div class="kpi-title">Prompt Adherence</div>
+    <div class="kpi-weight">Multiplier ×1.5</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Fully adhered</td><td>All responses stay within persona and KB scope; no personal opinions or off-topic answers given.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Slightly deviated</td><td>One minor step outside scope (e.g. gave an unsolicited suggestion) but quickly corrected course.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Partial drift</td><td>Multiple off-script responses detected; agent started improvising answers not backed by KB.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Off-prompt</td><td>Agent operated clearly outside role (gave legal/financial opinions, changed persona, answered from personal knowledge).</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">4</div>
+    <div class="kpi-title">Instructions Following</div>
+    <div class="kpi-weight">Multiplier ×1.5</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>All followed</td><td>Correct language used, honorifics (Mr./Ms.) applied, call flow respected, all do-not-say rules intact.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Mostly followed</td><td>One minor slip (e.g. skipped honorific once, minor flow deviation) but overall compliant.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Some missed</td><td>Several rules broken (e.g. spoke wrong language, skipped a qualification step, ignored script flow).</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Violated</td><td>Major rule broken — revealed it's an AI, spoke entirely in wrong language, disclosed prohibited info.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">5</div>
+    <div class="kpi-title">Intent / Entity Detection</div>
+    <div class="kpi-weight">Multiplier ×1.5</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Accurate</td><td>All entities correctly captured and confirmed (name, budget, interest/unit type, location preference).</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Mostly accurate</td><td>One entity slightly misheard or paraphrased but corrected later in the call.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Partial</td><td>Several key entities left ambiguous or not followed up on despite being mentioned.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Inaccurate</td><td>Wrong entities captured (e.g. wrong budget figure, wrong name recorded, wrong property type).</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">6</div>
+    <div class="kpi-title">Sentiment / Frustration Reading</div>
+    <div class="kpi-weight">Multiplier ×1.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Correct</td><td>Agent softened tone and applied objection handling when frustration signals appeared in the transcript.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Slightly misread</td><td>Acknowledged frustration but response was slightly off-tone or delayed one exchange.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Off</td><td>Missed the emotional cue and continued pushing the same approach without adjustment.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Missed</td><td>Client expressed clear frustration or desire to end call; agent completely ignored it and kept going.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">7</div>
+    <div class="kpi-title">Interest Level Detection</div>
+    <div class="kpi-weight">Multiplier ×1.5</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Correct</td><td>Correctly detected hot/warm/cold signals; closing approach and tag match what the transcript shows.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Mostly tracked</td><td>Interest level mostly right, minor mismatch in closing tone or slightly premature close.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Partial</td><td>Some interest signals missed; closing was premature or too late relative to signals given.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Missed</td><td>Interest level tagged completely wrong compared to what the transcript conversation reveals.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">8</div>
+    <div class="kpi-title">Wrong Person Handling</div>
+    <div class="kpi-weight">Multiplier ×1.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>Correct</td><td>Agent politely confirmed identity, asked for the right person, or ended professionally per script.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Minor deviation</td><td>Did the right thing but wording was slightly off the given wrong-person script.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Partial</td><td>Got confused and tried to continue with the pitch to the wrong person for one exchange.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Wrong handling</td><td>Disclosed private call info to wrong person, pitched fully to wrong person, or ended call rudely.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CATEGORY 3 -->
+<div class="section-title">📊 Category 3 — Data Accuracy</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">9</div>
+    <div class="kpi-title">Outcome Tag Accuracy</div>
+    <div class="kpi-weight">Multiplier ×2.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>All correct</td><td>Tag applied perfectly matches call outcome (e.g. client said "book me in" → Interested/Meeting Booked).</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Mostly correct</td><td>Close match — e.g. tagged "Needs Follow-up" when "Interested" would be more accurate but understandable.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Partially correct</td><td>Tag is plausible but misses nuance or is incomplete (e.g. missed DNC signal in transcript).</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Wrong / missing</td><td>Completely wrong tag applied OR no tag applied despite a clear outcome being reached in the call.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">10</div>
+    <div class="kpi-title">Overall Memory Fields Extraction</div>
+    <div class="kpi-weight">Multiplier ×2.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>All correct</td><td>Every required memory field is filled accurately (Sales: Name, Budget, Interest. Listing: Project, Type, Size, Price).</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Mostly correct</td><td>One field slightly paraphrased or approximated but close enough to be usable.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Partial</td><td>Multiple fields missing or inaccurate; key qualification data is not fully captured.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Poor</td><td>Most fields are missing or contain completely wrong values compared to what was stated.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">11</div>
+    <div class="kpi-title">Hallucination Severity</div>
+    <div class="kpi-weight">Multiplier ×2.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>None detected</td><td>Agent only referenced verifiable KB content; no invented facts, names, or claims.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Very minor</td><td>Slight rephrasing that changed meaning minimally (e.g. "about 900K" when KB says "starting from 850K").</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Minor / Low risk</td><td>Invented a soft claim without KB backing (e.g. "I believe the project is near the metro").</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Significant</td><td>Fabricated price, project name, amenity, payment plan, or made a false promise to close the call.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-header">
+    <div class="kpi-number">12</div>
+    <div class="kpi-title">Price Invention</div>
+    <div class="kpi-weight">Multiplier ×2.0</div>
+  </div>
+  <div class="kpi-body">
+    <table>
+      <thead><tr><th width="10%">Score</th><th width="25%">Label</th><th>How to Detect in Transcript</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-100">100%</span></td><td>No invented prices</td><td>Agent only quoted exact KB prices or correctly declined to give a price and offered to connect with consultant.</td></tr>
+        <tr><td><span class="badge-80">80%</span></td><td>Very minor rounding</td><td>Slight rounding of an existing KB price but intent and direction were correct.</td></tr>
+        <tr><td><span class="badge-50">50%</span></td><td>Conversion error</td><td>Got the AED/USD conversion wrong or mixed up payment plan figures.</td></tr>
+        <tr><td><span class="badge-20">20%</span></td><td>Invented price</td><td>Quoted a price with zero KB basis; no corresponding figure exists in any project material.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Scoring Formula -->
+<div class="formula-box">
+  <h3>🧮 Scoring Formula</h3>
+  <pre>
+Category Score  =  Σ (Question Score × Multiplier)  ÷  Σ (100% × Multiplier)
+
+Technical Score  =  Average of KPIs 1–2
+Rules Score      =  Average of KPIs 3–8
+Data Score       =  Average of KPIs 9–12
+Overall Score    =  Weighted average of all active categories
+
+Grade Thresholds:
+  ≥ 85%  →  ✓ Pass
+  ≥ 70%  →  ~ Needs Review
+  &lt; 70%  →  ✕ Fail
+
+Note: If a KPI is not triggered (no noise, price not raised, etc.), mark as N/A
+      and exclude from both the earned score AND the maximum score.
+  </pre>
+</div>
+
+<!-- Prompt Instructions -->
+<div class="prompt-box">
+  <h3>📝 System Prompt Template for AI Evaluator Agent</h3>
+  <p>
+    "You are a QA evaluation agent. You will be given a call transcript between an AI voice agent (Sarah) and a client.
+    Evaluate the agent's performance using the 12 KPIs below. For each KPI, select one of the four ratings
+    (100%, 80%, 50%, or 20%) and provide a one-line justification quoting specific evidence from the transcript.
+    If a KPI was not triggered during this call (e.g. no background noise, price was not raised), mark it as N/A
+    and exclude it from scoring. At the end, calculate the Overall Score, the category sub-scores (Technical,
+    Agent Rules, Data Accuracy), and the final Grade (Pass / Needs Review / Fail)."
+  </p>
+</div>
+
+<div class="footer">
+  Property Shop Investment &nbsp;|&nbsp; PSI AI Voice Agent QA Framework &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; March 2026
+</div>
+
+</body>
+</html>

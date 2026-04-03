@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkedIn AI Recruiter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header" style="text-align: center; margin-bottom: 24px;">
+      <div>
+        <h2 style="margin: 0; padding: 0;">PSI AI Agent</h2>
+        <p class="subtitle" style="margin: 4px 0 0 0;">Search, AI-filter, and export to CSV.</p>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-group">
+        <label for="platformSelect">Platform <span style="color:#e11d48">*</span></label>
+        <select id="platformSelect">
+          <option value="linkedin">LinkedIn People Search</option>
+          <option value="linkedin_jobs">LinkedIn Jobs (Easy Apply Bot)</option>
+          <option value="indeed">Indeed Resumes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Job Role <span style="color:#e11d48">*</span></label>
+        <select id="role">
+          <option value="Real Estate Sales Agent">Real Estate Sales Agent</option>
+          <option value="Admin">Admin</option>
+          <option value="Sales Agent">Sales Agent</option>
+          <option value="Sales Support">Sales Support</option>
+          <option value="CRM Analyst">CRM Analyst</option>
+          <option value="AI Operations">AI Operations</option>
+          <option value="Accountant">Accountant</option>
+          <option value="Operation Coordinator">Operation Coordinator</option>
+          <option value="Operation Manager">Operation Manager</option>
+          <option value="CustomRole">Other (Type Custom Role)...</option>
+        </select>
+        <input type="text" id="customRole" placeholder="Type custom role here..." style="display:none; margin-top:8px;" />
+      </div>
+
+      <div class="form-group">
+        <label for="requirements">Job Requirements <span style="color:#e11d48">*</span></label>
+        <textarea id="requirements" placeholder="e.g. Min 2 years of real estate experience..." rows="3"></textarea>
+      </div>
+
+      <div class="form-group" id="jobAppSettings" style="display:none; background-color: rgba(39,42,99,0.03); padding: 10px; border-radius: 6px; margin-top: 8px; border: 1px solid rgba(39,42,99,0.1);">
+        <label style="color:var(--psi-orange); font-size:11px; margin-bottom:8px;">EASY APPLY SETTINGS</label>
+        
+        <label for="expectedSalary">Expected Salary</label>
+        <input type="text" id="expectedSalary" placeholder="e.g. 15000 AED" style="margin-bottom: 8px;" />
+        
+        <label for="driverLicense" style="margin-top: 0px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; font-weight: normal; font-size: 13px; color: #4b5563;">
+          <input type="checkbox" id="driverLicense" style="width: auto; margin: 0; padding: 0;" />
+          Do you have a driver's license?
+        </label>
+
+        <label for="cvText" style="margin-top: 4px;">Your CV Content (Text) <span style="color:#e11d48">*</span></label>
+        <textarea id="cvText" placeholder="Paste your resume text here so AI can answer job questions..." rows="4"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="countrySelect">Target Country (Optional)</label>
+        <select id="countrySelect">
+          <option value="UAE">UAE</option>
+          <option value="KSA">Saudi Arabia</option>
+          <option value="EGY">Egypt</option>
+          <option value="QAT">Qatar</option>
+          <option value="IND">India</option>
+          <option value="USA">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="Anywhere">Anywhere Else / Custom...</option>
+        </select>
+        <input type="text" id="customCountry" placeholder="Type country name..." style="display:none; margin-top:8px;" />
+      </div>
+
+      <div class="form-group" id="cityGroup">
+        <label style="color: var(--psi-dark-blue); font-size: 13px;">Target Cities (Optional)</label>
+        <div id="cityCheckboxes" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px;">
+           <!-- Populated via JS -->
+        </div>
+        <input type="text" id="customCity" placeholder="Type custom cities (comma separated)..." style="display:none; margin-top:8px;" />
+      </div>
+
+      <div class="form-group" style="display:none;">
+        <label for="aiModel">AI Model</label>
+        <select id="aiModel">
+          <option value="openai">OpenAI API</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="apiKey">Your OpenAI API Key <span style="color:#e11d48">*</span></label>
+        <input type="password" id="apiKey" placeholder="sk-..." />
+      </div>
+    </div>
+
+    <div class="button-group" id="primaryActions" style="display:flex; flex-direction:column; gap:8px;">
+      <button id="saveSettingsBtn" class="secondary-btn">Save Settings</button>
+      
+      <div id="primaryStartBtnContainer" style="width:100%;">
+         <button id="startBtn" class="primary-btn" style="width:100%;">Start Search</button>
+      </div>
+
+      <div id="resumeActions" style="display:none; flex-direction:column; gap:10px; width:100%;">
+        <div style="font-size:12px; color:var(--psi-dark-blue); font-weight:700; text-align:center; padding: 4px; border-bottom: 1px solid rgba(39,42,99,0.1);">
+          Saved Session: Resume from Page <span id="lblPage" style="color:var(--psi-orange);"></span>?
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button id="resumeBtn" class="primary-btn" style="flex:1; background-color: var(--psi-orange); box-shadow: 0 4px 10px rgba(226, 96, 38, 0.2);">Continue</button>
+          <button id="restartBtn" class="secondary-btn" style="flex:1;">Start Over</button>
+        </div>
+      </div>
+
+      <button id="stopBtn" class="danger-btn" style="display:none; width:100%;">Stop Search</button>
+    </div>
+    
+    <div id="saveConfirm" style="display:none;">Settings Saved!</div>
+    
+    <div>
+      <button id="downloadBtn" class="download-btn">Download CSV Report</button>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px; margin-bottom: -4px;">
+      <div class="log-title" style="margin: 0;">Activity Stream</div>
+      <button id="clearLogsBtn" style="background: none; border: none; color: var(--psi-orange); font-size: 11px; font-weight: 700; cursor: pointer; padding: 0; text-transform: uppercase;">Clear</button>
+    </div>
+    <div id="log" class="log-area"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

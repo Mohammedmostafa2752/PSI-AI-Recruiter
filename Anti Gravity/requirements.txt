@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-telegram-bot
+SQLAlchemy
+python-dotenv
+aiohttp
+replicate
+jinja2
+pydantic
+requests
